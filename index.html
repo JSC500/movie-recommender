@@ -11,26 +11,30 @@
 
 <script>
     const movies = [
-        { name: "The Shawshank Redemption", year: 1994, genre: "Drama" },
-        { name: "The Godfather", year: 1972, genre: "Crime" },
-        { name: "The Dark Knight", year: 2008, genre: "Action" },
-        { name: "Pulp Fiction", year: 1994, genre: "Crime" },
-        { name: "The Lord of the Rings: The Fellowship of the Ring", year: 2001, genre: "Fantasy" },
-        { name: "Inception", year: 2010, genre: "Sci-Fi" },
-        { name: "Forrest Gump", year: 1994, genre: "Drama" },
-        { name: "The Matrix", year: 1999, genre: "Action" },
-        { name: "Titanic", year: 1997, genre: "Romance" },
-        { name: "The Silence of the Lambs", year: 1991, genre: "Thriller" },
-        { name: "The Avengers", year: 2012, genre: "Action" },
-        { name: "La La Land", year: 2016, genre: "Musical" },
-        { name: "The Grand Budapest Hotel", year: 2014, genre: "Comedy" },
-        { name: "Avatar", year: 2009, genre: "Adventure" },
-        { name: "Casablanca", year: 1942, genre: "Romance" },
-        { name: "Eternal Sunshine of the Spotless Mind", year: 2004, genre: "Romance" },
-        { name: "The Social Network", year: 2010, genre: "Biography" },
-        { name: "Pan's Labyrinth", year: 2006, genre: "Fantasy" },
-        { name: "The Departed", year: 2006, genre: "Crime" },
-        { name: "Interstellar", year: 2014, genre: "Sci-Fi" }
+        { name: "Die Eiskönigin - Völlig unverfroren", year: 2013, genre: "Animation" },
+        { name: "Ich - Einfach unverbesserlich", year: 2010, genre: "Animation" },
+        { name: "Findet Nemo", year: 2003, genre: "Animation" },
+        { name: "Der König der Löwen", year: 1994, genre: "Animation" },
+        { name: "Harry Potter und der Stein der Weisen", year: 2001, genre: "Fantasy" },
+        { name: "Zoomania", year: 2016, genre: "Animation" },
+        { name: "Toy Story", year: 1995, genre: "Animation" },
+        { name: "Die Unglaublichen", year: 2004, genre: "Animation" },
+        { name: "Die Monster AG", year: 2001, genre: "Animation" },
+        { name: "Shrek - Der tollkühne Held", year: 2001, genre: "Animation" },
+        { name: "Madagascar", year: 2005, genre: "Animation" },
+        { name: "Die Chroniken von Narnia: Der König von Narnia", year: 2005, genre: "Fantasy" },
+        { name: "Ratatouille", year: 2007, genre: "Animation" },
+        { name: "Die Schlümpfe", year: 2011, genre: "Animation" },
+        { name: "Aladdin", year: 1992, genre: "Animation" },
+        { name: "Pocahontas", year: 1995, genre: "Animation" },
+        { name: "Cars", year: 2006, genre: "Animation" },
+        { name: "Der gestiefelte Kater", year: 2011, genre: "Animation" },
+        { name: "Moana", year: 2016, genre: "Animation" },
+        { name: "Die Schöne und das Biest", year: 1991, genre: "Animation" }
     ];
+
+    const getRandomMovie = () => {
+        return movies[Math.floor(Math.random() * movies.length)];
+    }
 </script>
 </html>
