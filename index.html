@@ -7,6 +7,7 @@
 </head>
 <body style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; background: radial-gradient(circle, hsla(0, 0%, 0%, 1) 0%, hsla(211, 100%, 19%, 1) 100%); overflow: hidden;">
     <div id="recommendation" style="display: none; text-align: center; color: white; font-family: sans-serif;">
+        <img id="poster" style="max-width: 500px; max-height: 500px; margin-bottom: 16px;"/>
         <h1 id="title" style="margin: 0;">Titel</h1>
         <h2 id="year" style="color: rgb(66, 153, 225); font-weight: lighter; margin: 0;">Jahr</h2>
         <h3 id="genre" style="font-weight: normal; margin: 0;">Genre</h3>
@@ -20,38 +21,40 @@
 </body>
 
 <script>
-    const movies = [
-        { name: "Die Eiskönigin - Völlig unverfroren", year: 2013, genre: "Animation" },
-        { name: "Ich - Einfach unverbesserlich", year: 2010, genre: "Animation" },
-        { name: "Findet Nemo", year: 2003, genre: "Animation" },
-        { name: "Der König der Löwen", year: 1994, genre: "Animation" },
-        { name: "Harry Potter und der Stein der Weisen", year: 2001, genre: "Fantasy" },
-        { name: "Zoomania", year: 2016, genre: "Animation" },
-        { name: "Toy Story", year: 1995, genre: "Animation" },
-        { name: "Die Unglaublichen", year: 2004, genre: "Animation" },
-        { name: "Die Monster AG", year: 2001, genre: "Animation" },
-        { name: "Shrek - Der tollkühne Held", year: 2001, genre: "Animation" },
-        { name: "Madagascar", year: 2005, genre: "Animation" },
-        { name: "Die Chroniken von Narnia: Der König von Narnia", year: 2005, genre: "Fantasy" },
-        { name: "Ratatouille", year: 2007, genre: "Animation" },
-        { name: "Die Schlümpfe", year: 2011, genre: "Animation" },
-        { name: "Aladdin", year: 1992, genre: "Animation" },
-        { name: "Pocahontas", year: 1995, genre: "Animation" },
-        { name: "Cars", year: 2006, genre: "Animation" },
-        { name: "Der gestiefelte Kater", year: 2011, genre: "Animation" },
-        { name: "Moana", year: 2016, genre: "Animation" },
-        { name: "Die Schöne und das Biest", year: 1991, genre: "Animation" }
-    ];
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YWQ2NjUyMzkxYWIyOWZjN2EwODUyNTBlMGQxNGEzNyIsInN1YiI6IjY1YWY4MDQ4ZDEwMGI2MDBhZGE2YWU1MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8rqfmgrNrQoaM5tTUjzOro7pUlbe1ukYP7cfA0_DtB0'
+        }
+    };
 
-    const getRandomMovie = () => {
-        return movies[Math.floor(Math.random() * movies.length)];
+    let genres = [];
+
+    const getGenres = async () => {
+        const genresJSON = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=de', options);
+        genres = (await genresJSON.json()).genres;
     }
 
-    const recommendMovie = () => {
-        const randomMovie = getRandomMovie()
-        document.getElementById('title').innerHTML = randomMovie.name;
-        document.getElementById('year').innerHTML = randomMovie.year;
-        document.getElementById('genre').innerHTML = randomMovie.genre;
+    getGenres()
+
+    const getRandomMovie = async () => {
+        const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=de-DE&page=' + getRandomNumber(500), options);
+        const movies = await response.json();
+        return movies.results[getRandomNumber(movies.results.length)];
+    }
+
+    const getRandomNumber = (max) => {
+        return Math.floor(Math.random() * (max));
+    }
+
+    const recommendMovie = async () => {
+        const randomMovie = await getRandomMovie()
+        document.getElementById('title').innerHTML = randomMovie.title;
+        document.getElementById('year').innerHTML = randomMovie.release_date.substring(0, 4);
+        console.log(genres);
+        document.getElementById('genre').innerHTML = randomMovie.genre_ids.map(genreID => genres.find(genre => genre.id === genreID).name).join(', ');
+        document.getElementById('poster').src = 'https://image.tmdb.org/t/p/w500/' + randomMovie.poster_path;
         document.getElementById('recommendation').style.display = 'block';
     }
 </script>
