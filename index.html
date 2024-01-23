@@ -18,6 +18,7 @@
     >
         Schlag mir einen Film vor!
     </button>
+    <div style="display: flex; flex-wrap: wrap; max-width: 500px; gap: 8px; justify-content: center; margin-top: 12px;" id="genre-buttons"></div>
 </body>
 
 <script>
@@ -30,17 +31,42 @@
     };
 
     let genres = [];
+    let selectedGenres = [];
 
     const getGenres = async () => {
         const genresJSON = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=de', options);
         genres = (await genresJSON.json()).genres;
+        const genresDiv = document.getElementById('genre-buttons');
+        genres.forEach(genre => {
+            let genreButton = document.createElement('button');
+            genreButton.id = `genre-button-${genre.id}`;
+            genreButton.innerHTML = genre.name;
+            genreButton.style.border = '0';
+            genreButton.style.borderRadius = '3.5px';
+            genreButton.style.padding = '4px 8px';
+            genreButton.addEventListener('click', () => {
+                if (selectedGenres.includes(genre.id)) {
+                    selectedGenres = selectedGenres.filter(selectedGenre => selectedGenre !== genre.id);
+                    document.getElementById(`genre-button-${genre.id}`).style.backgroundColor = 'rgb(255,255,255)';
+                    document.getElementById(`genre-button-${genre.id}`).style.color = 'black';
+                } else {
+                    selectedGenres.push(genre.id);
+                    document.getElementById(`genre-button-${genre.id}`).style.backgroundColor = 'rgb(66, 153, 225)';
+                    document.getElementById(`genre-button-${genre.id}`).style.color = 'white';
+                }
+            })
+            genresDiv.appendChild(genreButton);
+        })
     }
 
     getGenres()
 
     const getRandomMovie = async () => {
-        const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=de-DE&page=' + getRandomNumber(500), options);
+        const response = await fetch(`https://api.themoviedb.org/3/discover/movie?certification.lte=16&certification_country=DE&region=DE&include_adult=false&include_video=false&language=de-DE&with_genres=${selectedGenres.join(',')}&page=${getRandomNumber(10) + 1}`, options);
         const movies = await response.json();
+        if (movies.results.length === 0) {
+            return null;
+        }
         return movies.results[getRandomNumber(movies.results.length)];
     }
 
@@ -50,11 +76,16 @@
 
     const recommendMovie = async () => {
         const randomMovie = await getRandomMovie()
-        document.getElementById('title').innerHTML = randomMovie.title;
-        document.getElementById('year').innerHTML = randomMovie.release_date.substring(0, 4);
-        console.log(genres);
-        document.getElementById('genre').innerHTML = randomMovie.genre_ids.map(genreID => genres.find(genre => genre.id === genreID).name).join(', ');
-        document.getElementById('poster').src = 'https://image.tmdb.org/t/p/w500/' + randomMovie.poster_path;
+        if (!randomMovie) {
+            document.getElementById('title').innerHTML = "Kein Film mit diesen Genres gefunden!";
+            document.getElementById('year').innerHTML = "";
+            document.getElementById('genre').innerHTML = "";
+        } else {
+            document.getElementById('title').innerHTML = randomMovie.title;
+            document.getElementById('year').innerHTML = randomMovie.release_date.substring(0, 4);
+            document.getElementById('genre').innerHTML = randomMovie.genre_ids.map(genreID => genres.find(genre => genre.id === genreID).name).join(', ');
+            document.getElementById('poster').src = 'https://image.tmdb.org/t/p/w500/' + randomMovie.poster_path;
+        }
         document.getElementById('recommendation').style.display = 'block';
     }
 </script>
