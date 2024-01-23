@@ -5,14 +5,18 @@
     <title>Filmvorschlag</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
-<body>
-    <button onclick="recommendMovie()">Schlag mir einen Film vor!</button>
-<!--    <div style="display: none">-->
-    <div id="recommendation" style="display: none">
-        <h1 id="title">Titel</h1>
-        <h2 id="year">Jahr</h2>
-        <h3 id="genre">Genre</h3>
+<body style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; background: radial-gradient(circle, hsla(0, 0%, 0%, 1) 0%, hsla(211, 100%, 19%, 1) 100%); overflow: hidden;">
+    <div id="recommendation" style="display: none; text-align: center; color: white; font-family: sans-serif;">
+        <h1 id="title" style="margin: 0;">Titel</h1>
+        <h2 id="year" style="color: rgb(66, 153, 225); font-weight: lighter; margin: 0;">Jahr</h2>
+        <h3 id="genre" style="font-weight: normal; margin: 0;">Genre</h3>
     </div>
+    <button
+        style="background: rgb(66, 153, 225); border-radius: 3.5px; border: 0; padding: 7px 14px; color: white; font-weight: bold; border-bottom: 4px solid rgb(43, 108, 176); margin-top: 20px;"
+        onclick="recommendMovie()"
+    >
+        Schlag mir einen Film vor!
+    </button>
 </body>
 
 <script>
